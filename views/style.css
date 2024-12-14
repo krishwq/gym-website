@@ -4,7 +4,7 @@
     overflow-x: hidden;
 }
 body::before{
-top: 45px;
+top: 0px;
 position: absolute;
     content: '';
     background: url('/static/gym.jpg') no-repeat center center;
