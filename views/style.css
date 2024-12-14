@@ -117,6 +117,7 @@ img{
 }
 .response {
 position: absolute;
+width: 100%;
 bottom: 10px;
 left: 50%;
 transform: translate(-50%);
