@@ -30,7 +30,7 @@ app.set("views", path.join(__dirname, "views")); //set views directory
 // Routes for form
 app.get("/", (req, res) => {
 if (req.session.loggedIn) {
-    res.render("thankyou.pug", { user: req.session.user });
+    res.render("thankyou.pug");
 } else {
     res.status(200).render("index.pug");
 }
@@ -51,7 +51,6 @@ data.save();
 
 if (name) {
     req.session.loggedIn = true;
-    req.session.username = name;
     res.redirect("/");
 } else {
     res.status(200).render("index.pug");
