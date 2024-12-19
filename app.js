@@ -5,6 +5,10 @@ const path = require("path");
 const fs = require("fs");
 const app = express();
 const PORT = 3000;
+const ConnectToMongo=require('./db');
+const user = require('./modules');
+
+ConnectToMongo(); // Connect to MongoDB
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true })); //for parse data
@@ -33,16 +37,18 @@ if (req.session.loggedIn) {
 });
 
 //for login and save data
-app.post("/login", (req, res) => {
-const { name, age, gender, address, more } = req.body;
-let dataTOSAVE = `Name of the client is ${name},age:${age},gender : ${gender}, residing at ${address}.More about him/her : ${more} \n`;
-  // Save form data to a file
-fs.appendFile("form-data.txt", dataTOSAVE, (err) => {
-    if (err) {
-    console.error("Error saving data:", err);
-    return res.status(500).send("Internal Server Error");
-    }
-});
+app.post("/submit",async (req, res) => {
+const {name,mobile}=req.body;
+
+let existuser=await user.findOne({mobile});
+if(existuser){
+    res.status(200).render("index.pug", { alert: "User already exists" });
+    return;
+}
+
+const data=user(req.body);
+data.save();
+
 if (name) {
     req.session.loggedIn = true;
     req.session.username = name;
@@ -52,10 +58,10 @@ if (name) {
 }
 });
 
-//logout
-app.get("/logout", (req, res) => {
+//submit anther response
+app.get("/another_response", (req, res) => {
 req.session.destroy(() => {
-    res.redirect("/");
+res.redirect("/");
 });
 });
 
